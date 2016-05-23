@@ -1,0 +1,8 @@
+---
+applications:
+- name: cf-node
+  command: node app.js
+  memory: 256M
+  instances: 1
+  host: cf-node
+  path: .
