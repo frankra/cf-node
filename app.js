@@ -39,6 +39,10 @@ function getMongoConnectionURL(){
   }
 }
 
+function getReqIp(req){
+	return req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+}
+
 mongoConnectionURL = getMongoConnectionURL();
 
 //Configure Applcation=================
@@ -61,7 +65,7 @@ app.get('/api/Messages',function(req,res){
 	}).then(function(aMessages){
 		res.send(aMessages);
 	}).catch(function(error){
-		console.log('Catched error: ', error.stack);
+		console.log('GET ALL Error catched', error);
 		res.status(500).send();
 	});
 });
@@ -73,20 +77,17 @@ app.post('/api/Messages',function(req,res){
 		if (messagesCollection){
 			return messagesCollection.insert({
 				text: req.body.text,
-				date: Date.now()
+				date: Date.now(),
+				ip: getReqIp(req)
 			});
 		}
 	}).then(function(sth){
 		res.send(sth);
 
 	}).catch(function(error){
-		console.log('Error catched', error);
+		console.log('POST Error catched', error);
 		res.status(500).send();
 	});
-});
-
-app.put('/api/Messages/:id',function(req,res){
-	res.send({test:true});
 });
 
 app.delete('/api/Messages/:id',function(req,res){
@@ -95,17 +96,18 @@ app.delete('/api/Messages/:id',function(req,res){
 	}).then(function(messagesCollection){
 		if (messagesCollection){
 			return messagesCollection.remove({
-				_id: req.params.id
+				_id: mongodb.ObjectId(req.params.id)
 			});
 		}
 	}).then(function(removedMessage){
 		if (removedMessage){
-			res.status(200).send();
+			res.status(200).send(removedMessage);
 		}else {
 			res.status(404).send();
 		}
 	}).catch(function(error){
-		res.status(500).send();
+		console.log('DELETE Error catched', error);
+		res.status(500).send(error);
 	});
 });
 //Start Application====================

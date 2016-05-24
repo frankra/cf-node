@@ -29,8 +29,6 @@
     "bower": "^1.7.9",
     "cfenv": "^1.0.3",
     "express": "^4.13.4",
-    "mongodb": "^2.1.19",
-    "mongoose": "^4.4.19",
-    "node-injectjs": "^1.0.7"
+    "mongodb": "^2.1.19"
   }
 }

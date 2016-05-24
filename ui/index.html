@@ -2,14 +2,13 @@
 <head>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/lib.css">
-	<script src="scripts/app.js"></script>
-	<script src="bower_components/angular/angular.min.js"></script>
-	<!--<script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>-->
-	<script src="bower_components/angular-route/angular-route.min.js"></script>
 
+	<script src="bower_components/angular/angular.min.js"></script>
+
+	<script src="scripts/app.js"></script>
 	<title>Node Cloud Foundry Demo</title>
 </head>
-<body>
+<body ng-app="MessagesApp" ng-controller="MainController">
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -25,20 +24,37 @@
 					<span>Node Cloud Foundry Demo</span>
 				</a>
 			</div>
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#SysStatus">System Status</a></li>
-				</ul>
-			</div>
 		</div>
 	</nav>
+	<div class="messageRow row">
+		<div class="col-xs-0 col-md-2"></div>
+		<div class="col-xs-12 col-md-8">
+			<div class="input-group">
+				<input ng-model="newMessage.text" type="text" class="form-control" placeholder="Write a Message">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" ng-click="sendMessage(newMessage)">Send</button>
+				</span>
+			</div><!-- /input-group -->
+		</div>
+		<div class="col-xs-0 col-md-2"></div>
+	</div>
+
 	<div class="row">
 		<div class="col-xs-0 col-md-2"></div>
 		<div class="col-xs-12 col-md-8">
-			<div class="container">
-
-
+			<div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="message in messages">
+						<div>
+							<div>From: {{message.ip}}, {{message.date | date :date:'medium'}}</div>
+							<br/>
+							<div>{{message.text}}</div>
+							<div class="deleteIcon">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteById(message._id)"></span>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-xs-0 col-md-2"></div>
